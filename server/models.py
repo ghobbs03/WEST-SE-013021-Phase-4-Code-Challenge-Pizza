@@ -37,6 +37,7 @@ class RestaurantPizza(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
+
     @validates('price')
     def check_price(self, key, price):
         if price not in range(1,31):
