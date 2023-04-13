@@ -21,8 +21,60 @@ def index():
 
 @app.route('/restaurants')
 def restaurants():
+    restaurants = Restaurant.query.all()
+    
+    restaurants_dict = [restaurant.to_dict() for restaurant in restaurants]
 
-    pass
+    return make_response(restaurants_dict, 200)
+
+
+@app.route('/restaurants/<int:id>', methods= ['GET', 'DELETE'])
+def restaurants_by_id(id):
+    restaurant = Restaurant.query.filter(Restaurant.id == id).first()
+
+    if request.method == 'GET':
+
+       
+        if restaurant:
+            response = make_response(restaurant.to_dict(), 200)
+        else:
+            response = make_response({"error": "Restaurant not found"}, 404)
+
+    elif request.method == 'DELETE':
+        if restaurant:
+            db.session.delete(restaurant)
+            db.session.commit()
+        else:
+            response = make_response({"error": "Restaurant not found"}, 404)
+    
+    return response
+
+@app.route('/pizzas')
+def get_pizzas():
+    pizzas = Pizza.query.all()
+    pizza_dict = [pizza.to_dict() for pizza in pizzas]
+
+    return make_response(pizza_dict, 201)
+
+
+@app.route('/restaurant_pizzas', methods=['POST'])
+def post_pizza():
+    if request.method == 'POST':
+        data = request.get_json()
+
+        try:
+
+            new_restaurant_pizza = RestaurantPizza(price=data['price'], pizza_id=data['pizza_id'], restaurant_id=data['restaurant_id'])
+            db.session.add(new_restaurant_pizza)
+            db.session.commit()
+
+            response = make_response(new_restaurant_pizza.to_dict(), 201)
+
+        except Exception as e:
+            response = make_response({"error": "Invalid input"}, 400)
+
+    return response
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
