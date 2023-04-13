@@ -68,7 +68,7 @@ def post_pizza():
             db.session.add(new_restaurant_pizza)
             db.session.commit()
 
-            response = make_response(new_restaurant_pizza.to_dict(), 201)
+            response = make_response(new_restaurant_pizza.to_dict(rules=('-id', '-pizza_id', '-price','-restaurant','-restaurant_id')), 201)
 
         except Exception as e:
             response = make_response({"error": "Invalid input"}, 400)
