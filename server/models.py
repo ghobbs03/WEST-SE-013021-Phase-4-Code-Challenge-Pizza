@@ -21,7 +21,7 @@ class Restaurant(db.Model, SerializerMixin):
     name = db.Column(db.String)
     address = db.Column(db.String)
 
-    restaurant_pizzas = db.relationship('RestaurantPizza', 'restaurant')
+    restaurant_pizzas = db.relationship('RestaurantPizza', backref='restaurant')
     pizzas = association_proxy('restaurant_pizzas', 'pizza')
 
 
@@ -36,9 +36,7 @@ class RestaurantPizza(db.Model, SerializerMixin):
     price = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
-    restaurant = association_proxy('restaurants', 'restaurant')
-
+    
 
 class Pizza(db.Model, SerializerMixin):
     __tablename__ = 'pizzas'
@@ -52,6 +50,6 @@ class Pizza(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    restaurant_pizzas = db.relationship('RestaurantPizza', 'pizza')
+    restaurant_pizzas = db.relationship('RestaurantPizza', backref='pizza')
     restaurants = association_proxy('restaurant_pizzas', 'restaurant')
 
