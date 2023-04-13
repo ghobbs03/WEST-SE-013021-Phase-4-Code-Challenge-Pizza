@@ -36,7 +36,7 @@ def restaurants_by_id(id):
 
        
         if restaurant:
-            response = make_response(restaurant.to_dict(), 200)
+            response = make_response(restaurant.to_dict(rules=('pizzas',)), 200)
         else:
             response = make_response({"error": "Restaurant not found"}, 404)
 
