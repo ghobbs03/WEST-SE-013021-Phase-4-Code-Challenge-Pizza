@@ -44,6 +44,7 @@ def restaurants_by_id(id):
         if restaurant:
             db.session.delete(restaurant)
             db.session.commit()
+            response = make_response({}, 200)
         else:
             response = make_response({"error": "Restaurant not found"}, 404)
     
